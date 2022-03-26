@@ -2,19 +2,33 @@ from typing import Optional, List
 
 from algosdk.v2client.algod import AlgodClient
 from algosdk.kmd import KMDClient
+import json
 
 from ..account import Account
 
-ALGOD_ADDRESS = "http://localhost:4001"
-ALGOD_TOKEN = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+with open("../testnet/Primary/config.json","r") as fin:
+    config = json.load(fin)
 
+config['EnableDeveloperAPI'] = True
+
+with open("../testnet/Primary/config.json","w") as fout:
+    json.dump(config, fout)
+
+with open("../testnet/Primary/algod.net","r") as fin:
+    ALGOD_ADDRESS = "http://" + fin.read().strip()
+
+with open("../testnet/Primary/algod.token","r") as fin:
+    ALGOD_TOKEN = fin.read().strip()
 
 def getAlgodClient() -> AlgodClient:
     return AlgodClient(ALGOD_TOKEN, ALGOD_ADDRESS)
 
 
-KMD_ADDRESS = "http://localhost:4002"
-KMD_TOKEN = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+with open("../testnet/Primary/kmd-v0.5/kmd.net","r") as fin:
+    KMD_ADDRESS = "http://" + fin.read().strip()
+
+with open("../testnet/Primary/kmd-v0.5/kmd.token","r") as fin:
+    KMD_TOKEN = fin.read().strip()
 
 
 def getKmdClient() -> KMDClient:
